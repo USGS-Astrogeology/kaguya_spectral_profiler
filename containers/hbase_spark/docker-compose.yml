@@ -36,7 +36,9 @@ services:
       - 8888
     networks:
       - vnet
-
+    volumes:
+      - work:/home/jovyan/work
+    command: --NotebookApp.token=''
 # Connect to both the Spark internal net and then connect the master / jupyter
 # to the hbase service stack as well.  This keeps these two services completely
 # independent from one another.
