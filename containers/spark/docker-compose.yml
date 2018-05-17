@@ -6,7 +6,7 @@ services:
     command: start-spark master
     hostname: master
     networks:
-      - snet
+      - vnet
     ports:
       - "6066:6066"
       - "7070:7070"
@@ -22,10 +22,10 @@ services:
     links:
       - master
     networks:
-      - snet
+      - vnet
 
   jupyter:
-    image: jlaura/jupyter-spark
+    image: kelvinrr/jupyter-spark
     environment:
       NB_USER: 'jlaura'
     links:
@@ -35,8 +35,14 @@ services:
     ports:
       - 8888
     networks:
-      - snet
+      - vnet
+    volumes:
+            - /data:/data
+
+
+    command: jupyter lab --allow-root --NotebookApp.token=''
 
 networks:
-  snet:
-    driver: bridge
+    vnet:
+        external:
+             name: vnet

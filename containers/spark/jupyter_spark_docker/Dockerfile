@@ -18,6 +18,10 @@ RUN cd /tmp && \
         rm spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 RUN cd /usr/local && ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark
 
+# update jupyter
+RUN conda install jupyterlab
+
+
 # Spark
 ENV SPARK_HOME /usr/local/spark
 
