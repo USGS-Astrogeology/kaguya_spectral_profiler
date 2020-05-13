@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Vector Tiles</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+	<script type="text/javascript"  src="https://unpkg.com/leaflet.vectorgrid@1.2.0"></script>
+</head>
+<body>
+
+  <div id="Vector tile demo" style="width: 600px; height: 400px;"></div>
+  <script>
+    var url = "http://localhost:8080/geoserver/gwc/service/tms/1.0.0/vectortiles%3Asp@EPSG%3A4326@pbf/{z}/{x}/{-y}.pbf"
+  	var mymap = L.map('Vector tile demo').setView([0,0], 5);
+
+    L.CRS.EPSG4326;
+
+    var basemap = L.tileLayer.wms("https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/earth/moon_simp_cyl.map", {
+      layers: "LROC_WAC",
+      format: "image/png",
+      crs: L.CRS.EPSG4326,
+      attribution: 'ASU/NASA'
+    }).addTo(mymap);
+
+    var vectorTileOptions = {
+      interactive: true,
+      vectorTileLayerStyles: {
+        sp: {
+          weight: 0,
+          interactive: true,
+          fillColor: 'red',
+          fillOpacity: 1,
+          radius: 6,
+          fill: true
+        }
+      }
+    };
+    var pbfLayer=L.vectorGrid.protobuf(url, vectorTileOptions).addTo(mymap);
+    var popup = L.popup();
+  	function onMapClick(e) {
+  		popup
+  			.setLatLng(e.latlng)
+  			.setContent("You clicked the map at " + e.latlng.toString())
+  			.openOn(mymap);
+  	}
+  	mymap.on('click', onMapClick);
+  </script>
+
+
+
+</body>
+</html>
